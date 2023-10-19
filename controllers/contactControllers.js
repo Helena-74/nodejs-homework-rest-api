@@ -76,9 +76,9 @@ catch(error) {
 }
 
 export default {
-  getAll: getAll,
-  getById: getById,
-  add: add,
-  updateById: updateById,
-  deleteById: deleteById,
+    getAll,
+    getById,
+    add,
+    updateById,
+    deleteById,
 }
