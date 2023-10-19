@@ -43,9 +43,6 @@ catch (error) {
 
 const updateById = async (req, res, next) => {
   try {
-    if (!Object.keys(req.body).length) {
-        throw HttpError(400, "All fields empty");
-    }
     const { error } = contactAddSchema.validate(req.body);
     if (error) {
         throw HttpError(400, error.message);
