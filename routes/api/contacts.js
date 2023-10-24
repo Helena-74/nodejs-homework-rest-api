@@ -2,11 +2,12 @@ import express from "express";
 import {contactAddSchema} from "../../models/contact.js";
 import contactsController from "../../controllers/contactControllers.js";
 import validateBody from "../../utils/validation/validateBody.js";
-import {isValidId} from "../../middlewares/index.js";
+import {isValidId, authenticate} from "../../middlewares/index.js";
 
 const contactAddValidate = validateBody(contactAddSchema);
 
 const contactsRouter = express.Router();
+contactsRouter.use(authenticate);
 
 contactsRouter.get('/', contactsController.getAll);
 
