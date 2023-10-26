@@ -4,6 +4,7 @@ import {handleSaveError} from "../models/hooks.js";
 
 const formatPhone = ["mobile", "work", "home"];
 const releaseYearReg = /^\d{4}$/;
+
 const contactSchema = new Schema({
   name:{
     type: String,
@@ -30,6 +31,9 @@ const contactSchema = new Schema({
     type: String,
     match: releaseYearReg,
     required: true,
+  },
+  avatar:{
+    type: String,
   },
   owner:{
     type: Schema.Types.ObjectId,

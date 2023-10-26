@@ -2,8 +2,14 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import { HttpError } from "../helpers/index.js";
+import Jimp from "jimp";
+import path from "path";
+import gravatar from "gravatar";
+import fs from "fs";
 
 const { JWT_SECRET } = process.env;
+
+const avatarsPath = path.resolve("public", "avatars");
 
 const signup = async(req, res)=> {
     const {email, password} = req.body;
@@ -14,11 +20,12 @@ const signup = async(req, res)=> {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({...req.body, password: hashPassword});
+    const newUser = await User.create({...req.body, password: hashPassword, avatarURL: gravatar.url(email)});
 
     res.status(201).json({
         username: newUser.username,
         email: newUser.email,
+        avatarURL: gravatar.url(email),
     })
 }
 
@@ -64,9 +71,34 @@ const signout = async (req, res) => {
   });
 };
 
+const changeAvatar = async (req, res) => {
+  const { _id } = req.user;
+
+  if (!_id) {
+    throw HttpError(401, "Not authorized");
+  }
+
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarsPath, filename);
+
+  await fs.rename(oldPath, newPath);
+
+  const image = await Jimp.read(newPath);
+  image.resize(250, 250);
+  await image.writeAsync(newPath);
+
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL: avatarURL });
+
+  res.json({
+    message: `"avatarURL": ${avatarURL}`,
+  });
+};
+
 export default {
   signup,
   signin,
   getCurrent,
   signout,
+  changeAvatar,
 }
