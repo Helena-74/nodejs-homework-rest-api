@@ -1,11 +1,9 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
-import contactsRouter from "./routes/api/contacts.js";
 import "dotenv/config";
+import contactsRouter from "./routes/api/contacts.js";
 import authRouter from "./routes/api/auth-router.js";
-
-// dotenv.config();
 
 const app = express()
 
