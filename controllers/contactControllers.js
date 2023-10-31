@@ -4,7 +4,6 @@ import { HttpError } from "../helpers/index.js";
 import Contact, { contactAddSchema } from "../models/contact.js";
 
 const avatarsPath = path.resolve("public", "avatars");
-console.log(avatarsPath);
 
 const getAll = async (req, res) => {
     console.log(req.user);
@@ -37,7 +36,6 @@ const add = async (req, res, next) => {
             throw HttpError(400, error.message);
         }
         const {_id: owner} = req.user;
-        console.log(req.body);
         const { path: oldPath, filename } = req.file;
         console.log(req.file);
         const newPath = path.join(avatarsPath, filename);
